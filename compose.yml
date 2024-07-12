@@ -1,0 +1,28 @@
+version: "0.1"
+services:
+  app:
+    container_name: sky-engine-app
+    build: .
+    env_file:
+      - .env
+    ports:
+      - '8000:8000'
+    depends_on:
+      - database
+  database:
+    image: postgres:latest
+    container_name: sky-engine-db
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DJANGO_DB_NAME}
+      - POSTGRES_USER=${DJANGO_DB_USER}
+      - POSTGRES_PASSWORD=${DJANGO_DB_PASSWORD}
+      - PGPORT=${DJANGO_DB_PORT}
+    volumes:
+      - db-data:/sky_engine
+    ports:
+      - "${DJANGO_DB_PORT}:${DJANGO_DB_PORT}"
+
+volumes:
+  db-data:
